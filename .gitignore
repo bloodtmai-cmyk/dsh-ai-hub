@@ -14,3 +14,8 @@ extension-host/node_modules/
 extension-host/dist/
 dist/
 npm-debug.log*
+
+# Local agent context and release-preparation notes
+/.codex/
+/design-system/
+/OPEN_SOURCE_CHECKLIST.md
