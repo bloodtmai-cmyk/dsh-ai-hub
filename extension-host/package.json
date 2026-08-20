@@ -1,0 +1,24 @@
+{
+  "name": "@dsh/ai-hub-extension-host",
+  "license": "MIT",
+  "repository": "https://github.com/bloodtmai-cmyk/dsh-ai-hub.git",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build": "tsc --noEmit && esbuild src/index.ts --bundle --platform=node --format=esm --target=node22 --outfile=dist/ai-hub-extension-host.mjs",
+    "test": "tsx --test tests/*.test.ts"
+  },
+  "dependencies": {
+    "@deepseek-ai/cordis": "4.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "24.10.1",
+    "esbuild": "0.27.0",
+    "tsx": "4.20.6",
+    "typescript": "5.7.3"
+  }
+}

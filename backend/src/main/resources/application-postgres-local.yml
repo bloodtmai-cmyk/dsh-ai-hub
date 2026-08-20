@@ -1,0 +1,12 @@
+spring:
+  datasource:
+    url: ${AI_HUB_DATABASE_URL:jdbc:postgresql://127.0.0.1:5432/ai_hub?currentSchema=ai_hub}
+    username: ${AI_HUB_DATABASE_USERNAME:ai_hub}
+    password: ${AI_HUB_DATABASE_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+  flyway:
+    default-schema: ${AI_HUB_DATABASE_SCHEMA:ai_hub}
+  jpa:
+    properties:
+      hibernate:
+        default_schema: ${AI_HUB_DATABASE_SCHEMA:ai_hub}

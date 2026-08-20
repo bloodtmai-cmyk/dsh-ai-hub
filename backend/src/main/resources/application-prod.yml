@@ -1,0 +1,26 @@
+spring:
+  datasource:
+    url: ${AI_HUB_DATABASE_URL}
+    username: ${AI_HUB_DATABASE_USERNAME}
+    password: ${AI_HUB_DATABASE_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+  flyway:
+    default-schema: ${AI_HUB_DATABASE_SCHEMA:ai_hub}
+  jpa:
+    properties:
+      hibernate:
+        default_schema: ${AI_HUB_DATABASE_SCHEMA:ai_hub}
+
+server:
+  address: ${AI_HUB_BIND_ADDRESS:127.0.0.1}
+  forward-headers-strategy: framework
+  servlet:
+    context-path: ${AI_HUB_CONTEXT_PATH:/ai-hub}
+    session:
+      cookie:
+        secure: ${AI_HUB_SESSION_COOKIE_SECURE:true}
+
+ai-hub:
+  extension-host:
+    enabled: true
+    required: true

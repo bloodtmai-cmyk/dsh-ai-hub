@@ -1,0 +1,16 @@
+.DS_Store
+.env
+.idea/
+.vscode/
+backend/target/
+backend/data/
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+frontend/*.tsbuildinfo
+frontend/vite.config.js
+frontend/vite.config.d.ts
+extension-host/node_modules/
+extension-host/dist/
+dist/
+npm-debug.log*

@@ -1,0 +1,62 @@
+spring:
+  application:
+    name: dsh-ai-hub
+  profiles:
+    default: local
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+  flyway:
+    enabled: true
+  jackson:
+    default-property-inclusion: non_null
+  servlet:
+    multipart:
+      max-file-size: 260MB
+      max-request-size: 260MB
+
+server:
+  port: 8090
+  address: 127.0.0.1
+  servlet:
+    session:
+      cookie:
+        http-only: true
+        same-site: strict
+  error:
+    include-message: never
+    include-stacktrace: never
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: never
+
+ai-hub:
+  admin:
+    workcode: ${AI_HUB_ADMIN_WORKCODE:}
+    password: ${AI_HUB_ADMIN_PASSWORD:}
+  security:
+    jwt-hmac-secret: ${AI_HUB_JWT_HMAC_SECRET:}
+    jwt-jwk-set-uri: ${AI_HUB_JWT_JWK_SET_URI:}
+    jwt-issuer: ${AI_HUB_JWT_ISSUER:dsh-ai-hub}
+    jwt-audience: ${AI_HUB_JWT_AUDIENCE:dsh-harness}
+    master-key: ${AI_HUB_MASTER_KEY:}
+    internal-api-key: ${AI_HUB_INTERNAL_API_KEY:}
+  audit:
+    retention-days: ${AI_HUB_AUDIT_RETENTION_DAYS:90}
+    max-content-length: ${AI_HUB_AUDIT_MAX_CONTENT_LENGTH:65536}
+  release:
+    artifact-root: ${AI_HUB_RELEASE_ARTIFACT_ROOT:./data/client-releases}
+    max-artifact-bytes: ${AI_HUB_RELEASE_MAX_ARTIFACT_BYTES:262144000}
+  extension-host:
+    enabled: ${AI_HUB_EXTENSION_HOST_ENABLED:false}
+    required: ${AI_HUB_EXTENSION_HOST_REQUIRED:false}
+    base-url: ${AI_HUB_EXTENSION_HOST_URL:http://127.0.0.1:8091}
+    api-key: ${AI_HUB_EXTENSION_HOST_API_KEY:}
+    required-plugins: ${AI_HUB_EXTENSION_HOST_REQUIRED_PLUGINS:gateway-catalog,skill-artifact,conversation-audit,manual-key-maintenance}

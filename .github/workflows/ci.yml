@@ -1,0 +1,100 @@
+name: Community CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: community-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  backend:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+      - name: Test
+        run: mvn --batch-mode test
+      - name: Generate CycloneDX SBOM
+        run: mvn --batch-mode org.cyclonedx:cyclonedx-maven-plugin:2.9.1:makeAggregateBom -DoutputFormat=json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: backend-sbom
+          path: backend/target/bom.json
+
+  frontend:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - run: npm ci
+      - run: npm run build
+      - name: Generate CycloneDX SBOM
+        run: npm sbom --sbom-format cyclonedx > bom.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: frontend-sbom
+          path: frontend/bom.json
+
+  extension-host:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: extension-host
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: extension-host/package-lock.json
+      - run: npm ci
+      - run: npm test
+      - run: npm run build
+      - name: Generate CycloneDX SBOM
+        run: npm sbom --sbom-format cyclonedx > bom.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: extension-host-sbom
+          path: extension-host/bom.json
+
+  public-artifacts:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Verify sanitization
+        run: ./scripts/verify-community-sanitization.sh
+      - name: Test example artifacts
+        run: node --test artifacts/*/tests/*.test.mjs

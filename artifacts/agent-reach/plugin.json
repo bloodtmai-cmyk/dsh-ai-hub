@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "id": "agent-reach",
+  "name": "Agent Reach",
+  "description": "由 AI Hub 授权下发的互联网调研插件，直接内置零 Key Exa MCP 搜索、Jina 原文读取和真实连通性体检，不依赖外部 agent-reach CLI。",
+  "version": "1.5.0-community.4",
+  "entry": "index.mjs",
+  "activation": "hot",
+  "permissions": [
+    "network:public-web",
+    "network:exa-public-mcp",
+    "network:jina-reader",
+    "process:fixed-curl"
+  ],
+  "skills": [
+    {
+      "name": "agent-reach",
+      "path": "skills/agent-reach"
+    }
+  ]
+}

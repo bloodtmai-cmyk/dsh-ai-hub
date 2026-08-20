@@ -1,0 +1,33 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:aihub;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;DEFAULT_NULL_ORDERING=HIGH;DB_CLOSE_DELAY=-1
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+  jpa:
+    hibernate:
+      ddl-auto: validate
+
+ai-hub:
+  admin:
+    workcode: "1000000"
+    password: "{noop}test-password"
+  security:
+    jwt-hmac-secret: "YWJjZGVmMDEyMzQ1Njc4OWFiY2RlZjAxMjM0NTY3ODlhYmNkZWY="
+    jwt-jwk-set-uri:
+    jwt-issuer: dsh-ai-hub-test
+    jwt-audience: dsh-harness-test
+    master-key: "MDEyMzQ1Njc4OWFiY2RlZjAxMjM0NTY3ODlhYmNkZWY="
+    internal-api-key: test-internal-service-key
+  audit:
+    retention-days: 90
+    max-content-length: 65536
+  release:
+    artifact-root: ${java.io.tmpdir}/ai-hub-test-releases
+    max-artifact-bytes: 1048576
+  extension-host:
+    enabled: false
+    required: false
+    base-url: http://127.0.0.1:8091
+    api-key:
+    required-plugins: []

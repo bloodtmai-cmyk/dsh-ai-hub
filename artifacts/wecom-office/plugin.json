@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "id": "wecom-office",
+  "name": "企业微信办公套件（官方验证版）",
+  "description": "通过企业微信官方 CLI 提供通讯录、日程、会议、消息、文档、表格、邮件、待办和微盘能力，所有命令都由受控白名单调用。",
+  "version": "1.2.0-community.5",
+  "entry": "index.mjs",
+  "activation": "hot",
+  "permissions": [
+    "network:wecom-official-api",
+    "process:bundled-wecom-cli",
+    "identity:wecom-user-consent"
+  ],
+  "skills": [
+    {
+      "name": "wecom-unified",
+      "path": "skills/wecom-unified"
+    }
+  ]
+}

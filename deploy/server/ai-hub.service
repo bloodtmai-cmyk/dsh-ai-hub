@@ -1,0 +1,19 @@
+[Unit]
+Description=DSH AI Hub
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=forking
+User=root
+WorkingDirectory=/opt/dsh-ai-hub
+PIDFile=/opt/dsh-ai-hub/ai-hub.pid
+ExecStart=/opt/dsh-ai-hub/start.sh
+ExecStop=/opt/dsh-ai-hub/stop.sh
+Restart=on-failure
+RestartSec=5
+TimeoutStartSec=120
+TimeoutStopSec=45
+
+[Install]
+WantedBy=multi-user.target

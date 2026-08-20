@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "id": "vision-toolkit",
+  "name": "企业视觉工具箱",
+  "description": "面向工作区图片的受管视觉插件，提供元数据检查、裁剪、像素差异、主色提取和托管模型视觉理解；不接受用户自定义服务、模型或 API Key。",
+  "version": "1.0.0-community.1",
+  "entry": "index.mjs",
+  "activation": "hot",
+  "permissions": [
+    "filesystem:workspace-read",
+    "filesystem:workspace-write-derived",
+    "model:managed-gateway"
+  ],
+  "skills": [
+    {
+      "name": "vision-toolkit",
+      "path": "skills/vision-toolkit"
+    }
+  ]
+}
