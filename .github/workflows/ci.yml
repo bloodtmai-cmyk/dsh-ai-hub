@@ -33,7 +33,7 @@ jobs:
         run: mvn --batch-mode test
       - name: Generate CycloneDX SBOM
         run: mvn --batch-mode org.cyclonedx:cyclonedx-maven-plugin:2.9.1:makeAggregateBom -DoutputFormat=json
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: backend-sbom
           path: backend/target/bom.json
@@ -57,7 +57,7 @@ jobs:
       - run: npm run build
       - name: Generate CycloneDX SBOM
         run: npm sbom --sbom-format cyclonedx > bom.json
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: frontend-sbom
           path: frontend/bom.json
@@ -82,7 +82,7 @@ jobs:
       - run: npm run build
       - name: Generate CycloneDX SBOM
         run: npm sbom --sbom-format cyclonedx > bom.json
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: extension-host-sbom
           path: extension-host/bom.json
