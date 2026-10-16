@@ -33,7 +33,7 @@ Hub 不代理正常的模型请求或 MCP Tool 调用，也不是身份提供方
 ## 目录
 
 ```text
-backend/         Spring Boot 3、Java 21、Spring Security、JPA、Flyway
+backend/         Spring Boot 4.1.1、Java 21、Spring Security、JPA、Flyway
 frontend/        React、TypeScript、Vite 管理界面
 extension-host/  受控 Cordis Provider/Connector 宿主
 artifacts/       可公开审查的示例插件与企业指令
@@ -55,7 +55,7 @@ Key 加密保存并只允许领取一次；Provider 和网关地址可在授权�
 
 ## 本地运行
 
-需要 Java 21、Maven、Node.js 22+ 和 npm。
+需要 Java 21、Maven、Node.js 22.12+ 和 npm。
 
 ```bash
 cd extension-host

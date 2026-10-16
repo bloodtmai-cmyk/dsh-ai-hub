@@ -6,13 +6,19 @@ import ai.dsh.hub.catalog.CapabilityService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
+import org.springframework.security.oauth2.jwt.JwsHeader;
+import org.springframework.security.oauth2.jwt.JwtClaimsSet;
+import org.springframework.security.oauth2.jwt.JwtEncoder;
+import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.time.Instant;
 import java.util.List;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
@@ -31,6 +37,8 @@ class RuntimeAuthorizationApiIntegrationTest {
     CapabilityService service;
     @Autowired
     CapabilityRepository repository;
+    @Autowired
+    JwtEncoder jwtEncoder;
 
     @BeforeEach
     void prepareAuthorizedTool() {
@@ -70,5 +78,28 @@ class RuntimeAuthorizationApiIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.mcps[0].mcp.externalRef").value("api-test-mcp"))
                 .andExpect(jsonPath("$.mcps[0].tools[0].externalRef").value("api-test-mcp/tool"));
+    }
+
+    @Test
+    void actualJwtSignatureAndAudienceAreStillValidated() throws Exception {
+        mockMvc.perform(get("/api/client/catalog"))
+                .andExpect(status().isUnauthorized());
+        mockMvc.perform(get("/api/client/catalog").header(HttpHeaders.AUTHORIZATION, "Bearer invalid-token"))
+                .andExpect(status().isUnauthorized());
+        mockMvc.perform(get("/api/client/catalog")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + token("dsh-harness-test")))
+                .andExpect(status().isOk());
+        mockMvc.perform(get("/api/client/catalog")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + token("wrong-audience")))
+                .andExpect(status().isUnauthorized());
+    }
+
+    private String token(String audience) {
+        Instant now = Instant.now();
+        var claims = JwtClaimsSet.builder().issuer("dsh-ai-hub-test").subject("12348")
+                .claim("workcode", "12348").audience(List.of(audience))
+                .issuedAt(now).expiresAt(now.plusSeconds(60)).build();
+        return jwtEncoder.encode(JwtEncoderParameters.from(JwsHeader.with(MacAlgorithm.HS256).build(), claims))
+                .getTokenValue();
     }
 }

@@ -33,7 +33,7 @@ Identity is verified by a replaceable Enterprise Gateway. The Gateway enforces c
 ## Repository layout
 
 ```text
-backend/         Spring Boot 3, Java 21, Spring Security, JPA, Flyway
+backend/         Spring Boot 4.1.1, Java 21, Spring Security, JPA, Flyway
 frontend/        React, TypeScript, Vite administration interface
 extension-host/  Controlled Cordis Provider/Connector host
 artifacts/       Publicly reviewable example plug-ins and instructions
@@ -55,7 +55,7 @@ Standard Harness still supports user-configured third-party models. This restric
 
 ## Run locally
 
-Prerequisites: Java 21, Maven, Node.js 22+, and npm.
+Prerequisites: Java 21, Maven, Node.js 22.12+, and npm.
 
 ```bash
 cd extension-host
