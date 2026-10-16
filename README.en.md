@@ -55,7 +55,7 @@ Standard Harness still supports user-configured third-party models. This restric
 
 ## Run locally
 
-Prerequisites: Java 21, Maven, Node.js 22+, and npm.
+Prerequisites: Java 21, Maven, Node.js 22.12+, and npm.
 
 ```bash
 cd extension-host
