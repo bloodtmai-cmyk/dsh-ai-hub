@@ -1,8 +1,8 @@
 package ai.dsh.hub.catalog;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.json.JsonMapper;
 import ai.dsh.hub.common.ApiException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -29,11 +29,11 @@ public class ClientPluginArtifactService {
 
     private final CapabilityService capabilityService;
     private final ClientPluginArtifactRepository artifactRepository;
-    private final ObjectMapper objectMapper;
+    private final JsonMapper objectMapper;
 
     public ClientPluginArtifactService(CapabilityService capabilityService,
                                        ClientPluginArtifactRepository artifactRepository,
-                                       ObjectMapper objectMapper) {
+                                       JsonMapper objectMapper) {
         this.capabilityService = capabilityService;
         this.artifactRepository = artifactRepository;
         this.objectMapper = objectMapper;
@@ -118,7 +118,7 @@ public class ClientPluginArtifactService {
         JsonNode root;
         try {
             root = objectMapper.readTree(manifestBytes);
-        } catch (IOException error) {
+        } catch (JacksonException error) {
             throw new ApiException(HttpStatus.BAD_REQUEST, "INVALID_PLUGIN_MANIFEST", "plugin.json 不是有效 JSON");
         }
         if (!root.isObject() || root.path("schemaVersion").asInt(-1) != 1) {
@@ -142,7 +142,7 @@ public class ClientPluginArtifactService {
         }
         try {
             return new ValidatedManifest(id, name, description, version, objectMapper.writeValueAsString(root));
-        } catch (JsonProcessingException error) {
+        } catch (JacksonException error) {
             throw new IllegalStateException("Unable to normalize plugin manifest", error);
         }
     }

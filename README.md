@@ -33,7 +33,7 @@ Hub 不代理正常的模型请求或 MCP Tool 调用，也不是身份提供方
 ## 目录
 
 ```text
-backend/         Spring Boot 3、Java 21、Spring Security、JPA、Flyway
+backend/         Spring Boot 4.1.1、Java 21、Spring Security、JPA、Flyway
 frontend/        React、TypeScript、Vite 管理界面
 extension-host/  受控 Cordis Provider/Connector 宿主
 artifacts/       可公开审查的示例插件与企业指令
