@@ -7,9 +7,13 @@
 
 <p align="center"><sub>独立社区项目，基于 DeepSeek Harness 的企业托管需求构建，与 DeepSeek AI 不存在隶属、合作、授权或背书关系。</sub></p>
 
+[English](README.en.md) | 中文
+
 ## 项目定位
 
-DSH AI Hub 配合 Harness Enterprise Desktop 使用，为企业提供一个统一的内部智能工作台入口。Hub 负责配置和授权，不代理正常的模型请求或 MCP Tool 调用，也不替代 LDAP、SSO、业务系统和数据源自身的权限控制。
+DSH AI Hub 是 [Harness Enterprise](https://github.com/bloodtmai-cmyk/dsh-harness-enterprise) 的配套控制面。两者共同提供受管的企业内部智能工作台入口：Hub 维护配置和授权，Harness Enterprise 提供面向用户的桌面运行时。
+
+Hub 不代理正常的模型请求或 MCP Tool 调用，也不是身份提供方，不替代 LDAP、SSO、业务系统、数据源及其权限控制。
 
 当前代码覆盖以下范围：
 
@@ -21,6 +25,10 @@ DSH AI Hub 配合 Harness Enterprise Desktop 使用，为企业提供一个统�
 - 模型访问申请、管理员录入和一次性领取。
 
 项目保留清晰边界：身份由可替换的 Enterprise Gateway 验证；Gateway 在 `tools/list` 和 `tools/call` 阶段执行 Hub 当前授权；下游业务系统继续负责最终的数据权限。
+
+## 配套项目
+
+[Harness Enterprise](https://github.com/bloodtmai-cmyk/dsh-harness-enterprise) 消费 Hub 提供的策略、受管制品、模型端点元数据和客户端版本信息。两个仓库保持独立，使组织可以替换任一侧，而不需要让 Hub 成为业务流量代理。
 
 ## 目录
 
@@ -82,7 +90,7 @@ cd .. && node --test artifacts/*/tests/*.test.mjs
 ./scripts/verify-community-sanitization.sh
 ```
 
-本仓库只发布源码，不提供 Harness 的 macOS 或 Windows 安装包。客户端构建、签名和分发由具体部署者负责。
+本仓库只发布源码，不提供 Harness Enterprise 的 macOS 或 Windows 安装包。客户端构建、签名和分发由具体部署者负责。
 
 ## 文档与维护
 
@@ -90,7 +98,6 @@ cd .. && node --test artifacts/*/tests/*.test.mjs
 - [API 接入](docs/api.md)
 - [参与贡献](CONTRIBUTING.md)
 - [安全策略](SECURITY.md)
-- [公开发布检查表](OPEN_SOURCE_CHECKLIST.md)
 
 项目由 `clanie` 维护。安全问题请不要提交公开 Issue，应按 [SECURITY.md](SECURITY.md) 发送私密报告。
 
