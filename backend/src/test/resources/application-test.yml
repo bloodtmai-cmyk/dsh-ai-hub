@@ -1,9 +1,9 @@
 spring:
   datasource:
-    url: jdbc:h2:mem:aihub;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;DEFAULT_NULL_ORDERING=HIGH;DB_CLOSE_DELAY=-1
-    username: sa
-    password:
-    driver-class-name: org.h2.Driver
+    url: ${AI_HUB_TEST_DATABASE_URL:jdbc:h2:mem:aihub;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;DEFAULT_NULL_ORDERING=HIGH;DB_CLOSE_DELAY=-1}
+    username: ${AI_HUB_TEST_DATABASE_USERNAME:sa}
+    password: ${AI_HUB_TEST_DATABASE_PASSWORD:}
+    driver-class-name: ${AI_HUB_TEST_DATABASE_DRIVER:org.h2.Driver}
   jpa:
     hibernate:
       ddl-auto: validate

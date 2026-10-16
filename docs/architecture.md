@@ -4,6 +4,20 @@
 
 首期只建设管理与授权控制面：管理员登录、对话审计、MCP/Tool/Skill/Bundle/CLIENT_PLUGIN 接入准入和授权、企业指令全员发布、菜单权限、企业市场申请审批、API Key 申请审批与领取。AI Hub 不代理 MCP Tool 调用，不保存 Gateway 请求头或下游业务凭据，也不判断组织、仓库、项目、物料等业务数据范围。
 
+## 后端运行与验证
+
+后端使用 Spring Boot 4.1.1 和 Java 21，JSON 由 Boot 自动配置的 Jackson 3 `JsonMapper` 处理。
+Web MVC、RestClient、Flyway 和测试使用对应的模块化 Starter；不并行保留 Jackson 2 兼容层。
+UUID、ISO 时间字符串、空字段省略、Session/CSRF 和 JWT 校验均有回归测试。
+
+默认 `mvn test` 使用 H2；`mvn -Ppostgres-test verify` 必须设置 `AI_HUB_TEST_DATABASE_URL`、
+`AI_HUB_TEST_DATABASE_USERNAME`、`AI_HUB_TEST_DATABASE_PASSWORD` 以及值为 `org.postgresql.Driver`
+的 `AI_HUB_TEST_DATABASE_DRIVER`，并连接一次性 PostgreSQL 测试实例。迁移夹具只允许本机
+`dsh_boot4_test` 数据库，使用随机 schema，覆盖全量建库、V8 旧数据升级和重复启动校验；
+不得指向业务数据库。CI 的 `backend-postgres` 在独立 PostgreSQL 17 服务中执行完整测试。
+Boot 版本迁移不修改 V1-V9 历史脚本；已有 Flyway 历史必须校验通过，旧 Key 绑定缺失的模型端点
+仍保持空值并拒绝领取，不在框架升级时补造业务配置。
+
 ## 身份边界
 
 - 管理端使用独立的服务端 Session。只有配置的单一管理员工号可以认证，所有写操作要求 CSRF Token。
