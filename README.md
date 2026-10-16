@@ -55,7 +55,7 @@ Key 加密保存并只允许领取一次；Provider 和网关地址可在授权�
 
 ## 本地运行
 
-需要 Java 21、Maven、Node.js 22+ 和 npm。
+需要 Java 21、Maven、Node.js 22.12+ 和 npm。
 
 ```bash
 cd extension-host

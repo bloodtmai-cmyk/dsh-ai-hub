@@ -10,15 +10,16 @@
   },
   "scripts": {
     "build": "tsc --noEmit && esbuild src/index.ts --bundle --platform=node --format=esm --target=node22 --outfile=dist/ai-hub-extension-host.mjs",
-    "test": "tsx --test tests/*.test.ts"
+    "test": "tsx --test tests/*.test.ts",
+    "test:runtime": "node --test tests/runtime-smoke.test.mjs"
   },
   "dependencies": {
-    "@deepseek-ai/cordis": "4.0.1"
+    "@deepseek-ai/cordis": "4.0.2"
   },
   "devDependencies": {
-    "@types/node": "26.5.0",
-    "esbuild": "0.27.0",
-    "tsx": "4.20.6",
-    "typescript": "5.7.3"
+    "@types/node": "22.20.5",
+    "esbuild": "0.28.2",
+    "tsx": "4.23.13",
+    "typescript": "7.0.2"
   }
 }
