@@ -72,6 +72,10 @@ React 管理端使用编译期 UI Slot 注册表。插件页面代码随前端�
 健康状态，不下载或执行远程 JavaScript。商店中的 MCP、Tool、Skill、Bundle、CLIENT_PLUGIN 是用户能力，
 与扩展 AI Hub 代码的平台插件严格分离。
 
+前端构建使用 TypeScript 7 原生 `tsc`，安装时需保留当前平台的可选编译器依赖。
+`npm run build` 先分别检查应用和 Vite 配置，再执行 Vite 打包；升级编译器不通过关闭
+应用的严格检查或跳过配置检查来规避兼容问题。
+
 ## 能力授权
 
 ```text
