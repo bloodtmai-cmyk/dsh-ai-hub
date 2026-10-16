@@ -26,6 +26,10 @@ Host 只承载受控的外部 Provider/Connector。Extension Host 固定监听
 `127.0.0.1:8091`，Spring 使用独立 Bearer 服务身份调用，生产启动时要求宿主和指定内置
 插件全部就绪。
 
+Extension Host 以 Node.js 22 为兼容基线，`@types/node` 保持在 22.x，不能只升级类型而扩大
+可用运行时 API。`npm run test:runtime` 必须在构建后执行，直接启动打包后的 `.mjs`，验证
+HTTP、Bearer 鉴权、插件调用以及 SIGTERM/SIGINT 退出后的端口释放；CI 在 Node.js 22 下运行该检查。
+
 ```text
 Nginx -> Spring Core 8090 -> PostgreSQL
                     |

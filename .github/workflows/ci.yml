@@ -80,6 +80,8 @@ jobs:
       - run: npm ci
       - run: npm test
       - run: npm run build
+      - name: Verify built host on Node 22
+        run: npm run test:runtime
       - name: Generate CycloneDX SBOM
         run: npm sbom --sbom-format cyclonedx > bom.json
       - uses: actions/upload-artifact@v6
