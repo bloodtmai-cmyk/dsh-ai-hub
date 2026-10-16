@@ -38,6 +38,40 @@ jobs:
           name: backend-sbom
           path: backend/target/bom.json
 
+  backend-postgres:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: backend
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_DB: dsh_boot4_test
+          POSTGRES_USER: dsh_test
+          POSTGRES_PASSWORD: dsh-ci-test-only
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U dsh_test -d dsh_boot4_test"
+          --health-interval 5s --health-timeout 5s --health-retries 12
+    env:
+      AI_HUB_TEST_DATABASE_URL: jdbc:postgresql://127.0.0.1:5432/dsh_boot4_test
+      AI_HUB_TEST_DATABASE_USERNAME: dsh_test
+      AI_HUB_TEST_DATABASE_PASSWORD: dsh-ci-test-only
+      AI_HUB_TEST_DATABASE_DRIVER: org.postgresql.Driver
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+      - name: Verify PostgreSQL migration and application compatibility
+        run: mvn --batch-mode -Ppostgres-test verify
+
   frontend:
     runs-on: ubuntu-24.04
     timeout-minutes: 15

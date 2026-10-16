@@ -6,6 +6,8 @@ import ai.dsh.hub.catalog.CapabilityService;
 import ai.dsh.hub.catalog.ClientPluginArtifactService;
 import ai.dsh.hub.common.ApiException;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
@@ -95,13 +97,28 @@ class ClientPluginMarketIntegrationTest {
                         error -> assertThat(error.code()).isEqualTo("UNSUPPORTED_PLUGIN_ACTIVATION"));
     }
 
+    @ParameterizedTest
+    @ValueSource(strings = {"{", "null", "[]", "{\"schemaVersion\":2}"})
+    void invalidManifestStillReturnsABusinessError(String manifest) throws Exception {
+        assertThatThrownBy(() -> artifactService.upload("invalid.zip", "application/zip",
+                zipWithManifest(manifest), "1000000"))
+                .isInstanceOfSatisfying(ApiException.class, error -> {
+                    assertThat(error.status().value()).isEqualTo(400);
+                    assertThat(error.code()).isEqualTo("INVALID_PLUGIN_MANIFEST");
+                });
+    }
+
     private static byte[] pluginZip(String version, String activation) throws Exception {
+        return zipWithManifest("""
+                {"schemaVersion":1,"id":"agent-reach","name":"Agent Reach","description":"Managed research plugin","version":"%s","entry":"index.mjs","activation":"%s"}
+                """.formatted(version, activation));
+    }
+
+    private static byte[] zipWithManifest(String manifest) throws Exception {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         try (ZipOutputStream zip = new ZipOutputStream(output)) {
             zip.putNextEntry(new ZipEntry("plugin.json"));
-            zip.write(("""
-                    {"schemaVersion":1,"id":"agent-reach","name":"Agent Reach","description":"Managed research plugin","version":"%s","entry":"index.mjs","activation":"%s"}
-                    """.formatted(version, activation)).getBytes(StandardCharsets.UTF_8));
+            zip.write(manifest.getBytes(StandardCharsets.UTF_8));
             zip.closeEntry();
             zip.putNextEntry(new ZipEntry("index.mjs"));
             zip.write("export function apply() {}\n".getBytes(StandardCharsets.UTF_8));
