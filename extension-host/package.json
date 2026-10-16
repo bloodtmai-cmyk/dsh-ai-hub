@@ -14,12 +14,12 @@
     "test:runtime": "node --test tests/runtime-smoke.test.mjs"
   },
   "dependencies": {
-    "@deepseek-ai/cordis": "4.0.2"
+    "@deepseek-ai/cordis": "4.0.4"
   },
   "devDependencies": {
     "@types/node": "22.20.5",
     "esbuild": "0.28.2",
-    "tsx": "4.23.13",
+    "tsx": "4.23.15",
     "typescript": "7.0.2"
   }
 }

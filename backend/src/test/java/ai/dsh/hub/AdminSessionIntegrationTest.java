@@ -2,7 +2,7 @@ package ai.dsh.hub;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpSession;
@@ -50,5 +50,15 @@ class AdminSessionIntegrationTest {
                                 """))
                 .andExpect(status().isUnauthorized())
                 .andExpect(jsonPath("$.code").value("LOGIN_FAILED"));
+    }
+
+    @Test
+    void adminRequestsStillRequireSessionAndCsrf() throws Exception {
+        mockMvc.perform(get("/api/admin/platform-plugins"))
+                .andExpect(status().isUnauthorized());
+        mockMvc.perform(post("/api/admin/session")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"workcode\":\"1000000\",\"password\":\"test-password\"}"))
+                .andExpect(status().isForbidden());
     }
 }
